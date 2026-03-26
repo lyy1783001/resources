@@ -1,19 +1,30 @@
-# 3：47
-'''给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
 
- 
+def buildTree(nums:list[int]):
+    nodes = [TreeNode(val) if val is not None else None for val in nums]
+    n = len(nums)
+    for i in range(n):
+        if 2*i+1 < n:
+            nodes[i].left = nodes[2*i+1]
+        if 2*i+2 < n:
+            nodes[i].right = nodes[2*i+2]
+    return nodes[0]
 
-示例 1：
-
-输入：nums = [1,5,11,5]
-输出：true
-解释：数组可以分割成 [1, 5, 5] 和 [11] 。'''
-nums = [1,5,11,5]
-target = sum(nums) // 2
-print(target)
-# bag,dp[件数][容量]
-n = len(nums)
-dp = [[0] * (target+1) for _ in range(n)]
-print(dp)
-print(len(dp))
-print(len(dp[0]))
+nums = [1,2,2,None,3,None,3]
+root = buildTree(nums)
+def f(root:TreeNode)->int:
+    def traverse(p, q):
+        if not p and q:
+            return False
+        if p and not q:
+            return False
+        if not p and not q:
+            return True
+        if p and q:
+            return traverse(p.left, q.right) and traverse(p.right, q.left)
+    return traverse(root.left, root.right)
+print(f(root))
